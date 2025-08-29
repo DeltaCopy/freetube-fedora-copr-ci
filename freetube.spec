@@ -49,7 +49,6 @@ EOF
 
 %build
 
-# clean
 yarn install
 yarn run build
 
