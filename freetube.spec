@@ -28,7 +28,6 @@ Obsoletes:      %{_app} <= %{version}
 Open source desktop YouTube player built with privacy in mind.
 
 %prep
-echo %{app}-%{version}-beta
 %autosetup -n %{_builddir}/%{app}-%{version}-beta -p1
 
 sed -i "s/targets = Platform.LINUX.*/targets = Platform.LINUX.createTarget(['dir'], arch)/" "%{_builddir}/%{app}-%{version}-beta/_scripts/build.js"
