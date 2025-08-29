@@ -47,7 +47,6 @@ Categories=Network;
 EOF
 
 %build
-
 yarn install
 yarn run build
 
