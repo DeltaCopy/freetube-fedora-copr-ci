@@ -7,6 +7,13 @@ If the latest version does not match the version available from the COPR then a 
 
 The COPR project repository is available from: https://copr.fedorainfracloud.org/coprs/deltacopy/freetube
 
+## Active releases available
+
+- Fedora 41
+- Fedora 42
+- Fedora 43
+- Fedora rawhide
+
 # Instructions
 
 Enable the COPR repository then install the package.
