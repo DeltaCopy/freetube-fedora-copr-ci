@@ -24,7 +24,7 @@ jobs:
       - name: Get latest tag
         run: |
           latest_tag=$(git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags $BUILD_REPO '*.*' \
-                                 | tail --lines=1 | cut --delimiter='/' --fields=3)
+            | tail --lines=1 | cut --delimiter='/' --fields=3)
 
           echo "INFO: Latest tag = $latest_tag"
 
@@ -51,10 +51,6 @@ jobs:
 
           echo "Latest COPR version = ${LATEST_COPR%-*}"
 
-          ls -lart  ${{ env.SPEC_FILE }}
-
-          cat  ${{ env.SPEC_FILE }}
-
           if [[ ${LATEST_COPR%-*} < ${{ env.LATEST_TAG }} ]] || [[ -z ${LATEST_COPR%-*} ]]; then
             echo "START_BUILD=true" >> "$GITHUB_ENV"
             echo "Starting COPR build"
@@ -63,6 +59,6 @@ jobs:
             echo "Skipping COPR build"
           fi
 
-      # - name: Trigger COPR build
-      #   if: env.START_BUILD == 'true'
-      #   run: copr-cli build ${{ env.COPR_PROJECT }} output/COPR/specs/${{ env.SPEC_FILE }}
+      - name: Trigger COPR build
+        if: env.START_BUILD == 'true'
+        run: copr-cli build ${{ env.COPR_PROJECT }} output/COPR/specs/${{ env.SPEC_FILE }}
