@@ -31,32 +31,7 @@ Open source desktop YouTube player built with privacy in mind.
 echo %{app}-%{version}-beta
 %autosetup -n %{_builddir}/%{app}-%{version}-beta -p1
 
-# create a modified build.js file to only target rpm
-cat << EOF > %{_builddir}/%{app}-%{version}-beta/_scripts/build.js
-const os = require('os')
-const builder = require('electron-builder')
-const config = require('./ebuilder.config.js')
-
-const Platform = builder.Platform
-const args = process.argv
-const Arch = builder.Arch
-
-let arch = Arch.x64
-targets = Platform.LINUX.createTarget(['rpm'], arch)
-
-builder
-    .build({
-        targets,
-        config,
-        publish: 'never'
-    })
-    .then(m => {
-        console.log(m)
-    })
-    .catch(e => {
-        console.error(e)
-    })
-EOF
+sed -i "s/targets = Platform.LINUX.*/targets = Platform.LINUX.createTarget(['dir'], arch)/" "%{_builddir}/%{app}-%{version}-beta/_scripts/build.js"
 
 # create a .desktop file
 cat << EOF > %{_app}.desktop
@@ -75,7 +50,6 @@ EOF
 %build
 
 # clean
-rm -rf yarn.lock package-lock.json node_modules
 yarn install
 yarn run build
 
@@ -88,7 +62,7 @@ mkdir -p %{buildroot}/%{_datadir}/licenses/%{app}
 
 cp -r %{_builddir}/%{app}-%{version}-beta/build/linux-unpacked/* %{buildroot}/%{_libdir}/%{app}
 cp %{_builddir}/%{app}-%{version}-beta/LICENSE %{buildroot}/%{_datadir}/licenses/%{app}
-ln -srf %{_libdir}/%{app}/%{app} %{buildroot}%{_bindir}/%{_app}
+ln -srf %{_libdir}/%{app}/%{_app} %{buildroot}%{_bindir}/%{_app}
 
 install -Dm644 %{_app}.desktop %{buildroot}%{_datadir}/applications/%{app}.desktop
 install -Dm644 %{_builddir}/%{app}-%{version}-beta/_icons/icon.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/%{app}.svg
