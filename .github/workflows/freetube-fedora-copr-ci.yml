@@ -6,7 +6,7 @@ env:
   COPR_USERNAME: deltacopy
   COPR_URL: https://copr.fedorainfracloud.org
   BUILD_REPO: https://github.com/FreeTubeApp/FreeTube
-  SPEC_FILE: $GITHUB_WORKSPACE/.github/assets/freetube.spec
+  SPEC_FILE: $GITHUB_WORKSPACE/freetube.spec
 jobs:
   copr-ci:
     runs-on: ubuntu-latest
@@ -16,7 +16,6 @@ jobs:
         uses: actions/checkout@v4.2.0
         with:
           repository: ${{ github.repository }}
-          sparse-checkout: .github/assets
           sparse-checkout-cone-mode: false
 
       - name: Install dependencies
