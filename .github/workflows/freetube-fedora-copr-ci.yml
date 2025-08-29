@@ -1,6 +1,8 @@
 # Build FreeTube and publish release
 name: FreeTube Fedora COPR build
-on: workflow_dispatch
+on:
+  schedule:
+    - cron: "0 00 * * *" # At 00:00 daily
 env:
   COPR_PROJECT: freetube
   COPR_USERNAME: deltacopy
@@ -50,6 +52,7 @@ jobs:
           LATEST_COPR=$(copr-cli get-package ${{ env.COPR_USERNAME }}/${{ env.COPR_PROJECT }} --name ${{ env.COPR_PROJECT }} | python -c 'import json,sys;obj=json.load(sys.stdin);print(obj["latest_build"]["source_package"]["version"]);')
 
           echo "Latest COPR version = ${LATEST_COPR%-*}"
+          echo "Latest Git tag release = ${{ env.LATEST_TAG }}"
 
           if [[ ${LATEST_COPR%-*} < ${{ env.LATEST_TAG }} ]] || [[ -z ${LATEST_COPR%-*} ]]; then
             echo "START_BUILD=true" >> "$GITHUB_ENV"
