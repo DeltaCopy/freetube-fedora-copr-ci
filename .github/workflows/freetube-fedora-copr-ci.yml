@@ -62,4 +62,4 @@ jobs:
 
       - name: Trigger COPR build
         if: env.START_BUILD == 'true'
-        run: copr-cli build ${{ env.COPR_PROJECT }} output/COPR/specs/${{ env.SPEC_FILE }}
+        run: copr-cli build ${{ env.COPR_PROJECT }} ${{ env.SPEC_FILE }}
