@@ -52,10 +52,13 @@ jobs:
           echo "Latest COPR version = ${LATEST_COPR%-*}"
           echo "Latest Git tag release = ${{ env.LATEST_TAG }}"
 
+          if awk "BEGIN {exit !($LATEST_TAG < ${LATEST_COPR%-*})}" || -z ${LATEST_COPR%-*}; then
+            echo "START_BUILD=true" >> "$GITHUB_ENV"
+          else
+            echo "START_BUILD=false" >> "$GITHUB_ENV"
+          fi
 
-          [[ (("$LATEST_COPR%-*" < "$LATEST_TAG")) ]]; echo STATUS=$? >> "$GITHUB_ENV"
-
-          echo env.STATUS
+          echo env.START_BUILD
 
           # if [[ env.START_BUILD == 'true' ]]; then
           #   echo "start build"
