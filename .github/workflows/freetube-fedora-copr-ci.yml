@@ -65,9 +65,8 @@ jobs:
               echo "Skipping COPR build"
           fi
 
-      - name: Trigger COPR build
+      - name: Start COPR build
         if: env.START_BUILD == 'true'
         run: |
           echo "Starting COPR build"
-          cat ${{ env.SPEC_FILE }}
-      #     copr-cli build ${{ env.COPR_PROJECT }} ${{ env.SPEC_FILE }}
+          copr-cli build ${{ env.COPR_PROJECT }} ${{ env.SPEC_FILE }}
