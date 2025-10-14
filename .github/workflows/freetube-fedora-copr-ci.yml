@@ -54,6 +54,8 @@ jobs:
 
           [[ (("$LATEST_COPR%-*" < "$LATEST_TAG")) ]]; STATUS=$?
 
+          echo "status = $STATUS"
+
           if [[ $STATUS == 1 ]] || [[ -z ${LATEST_COPR%-*} ]]; then
             echo "START_BUILD=true" >> "$GITHUB_ENV"
             echo "Starting COPR build"
