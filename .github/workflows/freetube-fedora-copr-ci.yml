@@ -69,4 +69,5 @@ jobs:
         if: env.START_BUILD == 'true'
         run: |
           echo "Starting COPR build"
+          cat ${{ env.SPEC_FILE }}
       #     copr-cli build ${{ env.COPR_PROJECT }} ${{ env.SPEC_FILE }}

@@ -2,7 +2,7 @@
 %define app FreeTube
 %define _app freetube
 %define dev FreeTubeApp
-%define release_tag 0.23.8
+%define release_tag ${TAG} # this line gets updated automatically by Github Actions
 
 Name: %{_app}
 Version: %{release_tag}
