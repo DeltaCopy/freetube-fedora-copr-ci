@@ -58,13 +58,13 @@ jobs:
             echo "START_BUILD=false" >> "$GITHUB_ENV"
           fi
 
-          echo env.START_BUILD
+          
 
-          # if [[ env.START_BUILD == 'true' ]]; then
-          #   echo "start build"
-          # else
-          #   echo "stop build"
-          # fi
+          if [[ env.START_BUILD == 'true' ]]; then
+            echo "start build"
+          else
+            echo "stop build"
+          fi
 
           # if [[ -z ${LATEST_COPR%-*} ]]; then
           #   echo "START_BUILD=true" >> "$GITHUB_ENV"
