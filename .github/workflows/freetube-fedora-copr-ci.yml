@@ -52,18 +52,15 @@ jobs:
           echo "Latest COPR version = ${LATEST_COPR%-*}"
           echo "Latest Git tag release = ${{ env.LATEST_TAG }}"
 
-          [[ (("$LATEST_COPR%-*" < "$LATEST_TAG")) ]]; STATUS=$?
+          [[ (("$LATEST_COPR%-*" < "$LATEST_TAG")) ]]; if [[ $? -eq 0 ]] || [[ -z ${LATEST_COPR%-*} ]]; then echo "START_BUILD=true" >> "$GITHUB_ENV" fi
 
-          echo "status = $STATUS"
-
-          if [[ $STATUS == 1 ]] || [[ -z ${LATEST_COPR%-*} ]]; then
+          if [[ -z ${LATEST_COPR%-*} ]]; then
             echo "START_BUILD=true" >> "$GITHUB_ENV"
             echo "Starting COPR build"
-          else
-            echo "START_BUILD=false" >> "$GITHUB_ENV"
-            echo "Skipping COPR build"
           fi
 
       - name: Trigger COPR build
         if: env.START_BUILD == 'true'
-        run: copr-cli build ${{ env.COPR_PROJECT }} ${{ env.SPEC_FILE }}
+        run: |
+          echo "Starting COPR build"
+          copr-cli build ${{ env.COPR_PROJECT }} ${{ env.SPEC_FILE }}
