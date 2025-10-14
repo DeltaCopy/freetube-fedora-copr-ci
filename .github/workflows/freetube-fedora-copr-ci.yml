@@ -8,7 +8,7 @@ env:
   BUILD_REPO: https://github.com/FreeTubeApp/FreeTube
   SPEC_FILE: $GITHUB_WORKSPACE/freetube.spec
 jobs:
-  copr-ci:
+  freetube-copr-ci:
     runs-on: ubuntu-latest
     container: fedora:latest
     steps:
