@@ -54,13 +54,15 @@ jobs:
 
           [[ (("$LATEST_COPR%-*" < "$LATEST_TAG")) ]]; if [[ $? -eq 0 ]] || [[ -z ${LATEST_COPR%-*} ]]; then echo "START_BUILD=true" >> "$GITHUB_ENV" fi
 
-          if [[ -z ${LATEST_COPR%-*} ]]; then
-            echo "START_BUILD=true" >> "$GITHUB_ENV"
-            echo "Starting COPR build"
-          fi
+          echo env.START_BUILD
 
-      - name: Trigger COPR build
-        if: env.START_BUILD == 'true'
-        run: |
-          echo "Starting COPR build"
-          copr-cli build ${{ env.COPR_PROJECT }} ${{ env.SPEC_FILE }}
+          # if [[ -z ${LATEST_COPR%-*} ]]; then
+          #   echo "START_BUILD=true" >> "$GITHUB_ENV"
+          #   echo "Starting COPR build"
+          # fi
+
+      # - name: Trigger COPR build
+      #   if: env.START_BUILD == 'true'
+      #   run: |
+      #     echo "Starting COPR build"
+      #     copr-cli build ${{ env.COPR_PROJECT }} ${{ env.SPEC_FILE }}
