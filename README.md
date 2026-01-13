@@ -9,7 +9,6 @@ The COPR project repository is available from: https://copr.fedorainfracloud.org
 
 ## Active releases available
 
-- Fedora 41
 - Fedora 42
 - Fedora 43
 - Fedora rawhide
