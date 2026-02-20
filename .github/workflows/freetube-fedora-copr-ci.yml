@@ -1,5 +1,5 @@
 # Build io.freetubeapp.FreeTube and publish release
-name: io.freetubeapp.FreeTube Fedora COPR build
+name: Fedora CI COPR build
 on: workflow_dispatch
 env:
   COPR_PROJECT: io.freetubeapp.FreeTube
