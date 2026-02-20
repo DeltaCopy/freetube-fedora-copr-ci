@@ -5,7 +5,7 @@ A GitHub actions workflow is scheduled to run daily at 12AM to check the latest 
 
 If the latest version does not match the version available from the COPR then a new COPR build is triggered remotely.
 
-The COPR project repository is available from: https://copr.fedorainfracloud.org/coprs/deltacopy/freetube
+The COPR project repository is available from: https://copr.fedorainfracloud.org/coprs/deltacopy/io.freetubeapp.FreeTube
 
 ## Active releases available
 
@@ -18,8 +18,8 @@ The COPR project repository is available from: https://copr.fedorainfracloud.org
 Enable the COPR repository then install the package.
 
 <pre>
-sudo dnf copr enable deltacopy/freetube
-sudo dnf in freetube
+sudo dnf copr enable deltacopy/io.freetubeapp.FreeTube
+sudo dnf in io.freetubeapp.FreeTube
 </pre>
 
 <h3> COPR build status </h3> 
