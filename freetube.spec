@@ -6,9 +6,8 @@
 
 Name: %{_app}
 Version: %{release_tag}
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Open source desktop YouTube player built with privacy in mind.
-Group: System/GUI/Internet
 License: AGPL-3.0-only
 
 URL: https://github.com/%{dev}/%{app}
@@ -39,7 +38,7 @@ Name=FreeTube
 Exec=freetube %U
 Terminal=false
 Type=Application
-Icon=FreeTube
+Icon=io.freetubeapp.FreeTube
 StartupWMClass=FreeTube
 Comment=An open source desktop YouTube player built with privacy in mind.
 MimeType=x-scheme-handler/freetube;
