@@ -1,6 +1,8 @@
 # Build io.freetubeapp.FreeTube and publish release
-name: Fedora CI COPR build
-on: workflow_dispatch
+name: FreeTube Fedora CI COPR build
+on:
+  schedule:
+    - cron: "0 00 * * *" # At 00:00 daily
 env:
   COPR_PROJECT: freetube
   COPR_USERNAME: deltacopy
