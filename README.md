@@ -24,7 +24,7 @@ sudo dnf in io.freetubeapp.FreeTube
 
 <h3> COPR build status </h3> 
 
-[![Copr build status](https://copr.fedorainfracloud.org/coprs/deltacopy/freetube/package/freetube/status_image/last_build.png)](https://copr.fedorainfracloud.org/coprs/deltacopy/io.freetubeapp.FreeTube/package/io.freetubeapp.FreeTube/)
+[![Copr build status](https://copr.fedorainfracloud.org/coprs/deltacopy/freetube/package/freetube/status_image/last_build.png)](https://copr.fedorainfracloud.org/coprs/deltacopy/freetube/package/freetube)
 
 <h3> GitHub action workflow status </h3> 
 
