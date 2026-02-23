@@ -7,7 +7,7 @@
 
 Name: %{_app}
 Version: %{release_tag}
-Release: 2%{?dist}
+Release: 1%{?dist}
 Summary: Open source desktop YouTube player built with privacy in mind.
 License: AGPL-3.0-only
 
