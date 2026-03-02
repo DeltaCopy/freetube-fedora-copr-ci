@@ -103,9 +103,9 @@ jobs:
           # use the tag name but strip the 'v' and '-beta' for the asset name to publish
           latest_tag=$(echo ${{ needs.GetLatestVersion.outputs.VERSION }}| sed 's/^v//g;s/-beta//g')
 
-          echo "LATEST_TAG=$tagname" >> "$GITHUB_ENV"
+          echo "LATEST_TAG=$latest_tag" >> "$GITHUB_ENV"
 
-          sed -i "s/.*%define release_tag.*/%define release_tag ${tagname}/" ${{ env.SPEC_FILE }}
+          sed -i "s/.*%define release_tag.*/%define release_tag ${latest_tag}/" ${{ env.SPEC_FILE }}
 
       - name: Update copr-cli configuration
         run: |
