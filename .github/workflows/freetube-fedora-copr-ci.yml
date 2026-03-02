@@ -18,11 +18,7 @@ jobs:
         id: step_version
         run: |
           # get latest release tag from remote
-
-          git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags $BUILD_REPO '*.*' \
-            | tail --lines=1 | cut --delimiter='/' --fields=3
-
-          latest_tag=$(git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags $BUILD_REPO '*.*' \
+          latest_release_tag=$(git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags $BUILD_REPO '*.*' \
           | tail --lines=1 | cut --delimiter='/' --fields=3)
 
           echo "INFO: Latest tag = $latest_release_tag"
