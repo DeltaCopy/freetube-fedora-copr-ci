@@ -7,8 +7,6 @@ env:
   COPR_URL: https://copr.fedorainfracloud.org
   BUILD_REPO: https://github.com/FreeTubeApp/FreeTube
   SPEC_FILE: $GITHUB_WORKSPACE/freetube.spec
-  REPO_DEV: FreeTubeApp
-  REPO_NAME: FreeTube
 jobs:
 
   GetLatestVersion:
@@ -23,9 +21,8 @@ jobs:
         run: |
           # get latest release tag from remote
 
-           curl -s https://api.github.com/repos/$REPO_DEV/$REPO_NAME/releases/latest |  jq -r '.tag_name'
-
-           latest_release_tag=$(curl -s https://api.github.com/repos/$REPO_DEV/$REPO_NAME/releases/latest |  jq -r '.tag_name')
+            latest_tag=$(git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags $BUILD_REPO '*.*' \
+            | tail --lines=1 | cut --delimiter='/' --fields=3)
 
            echo "INFO: Latest tag = $latest_release_tag"
 
@@ -105,8 +102,6 @@ jobs:
 
       - name: Get latest tag
         run: |
-          echo ${{ needs.GetLatestVersion.outputs.VERSION }}
-
           # use the tag name but strip the 'v' and '-beta' for the asset name to publish
           latest_tag=$(echo ${{ needs.GetLatestVersion.outputs.VERSION }}| sed 's/^v//g;s/-beta//g')
 
