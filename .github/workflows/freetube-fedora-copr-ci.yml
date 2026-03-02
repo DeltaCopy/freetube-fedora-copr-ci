@@ -14,26 +14,26 @@ jobs:
     outputs:
       VERSION: ${{ steps.step_version.outputs.VERSION }}
     steps:
-      - name: Install git
-        run: sudo apt-get update -y && sudo apt-get install -y git
-
       - name: Get latest version
         id: step_version
         run: |
           # get latest release tag from remote
 
-            latest_tag=$(git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags $BUILD_REPO '*.*' \
-            | tail --lines=1 | cut --delimiter='/' --fields=3)
+          git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags $BUILD_REPO '*.*' \
+            | tail --lines=1 | cut --delimiter='/' --fields=3
 
-           echo "INFO: Latest tag = $latest_release_tag"
+          latest_tag=$(git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags $BUILD_REPO '*.*' \
+          | tail --lines=1 | cut --delimiter='/' --fields=3)
 
-           if [ ! -z $latest_release_tag ]; then
-             latest_tag=$(echo $latest_release_tag | sed 's/v//')
-             echo "VERSION=${latest_release_tag}" >> "$GITHUB_OUTPUT"
-           else
-             echo "Latest tag is unknown"
-             exit 1
-           fi
+          echo "INFO: Latest tag = $latest_release_tag"
+
+          if [ ! -z $latest_release_tag ]; then
+            latest_tag=$(echo $latest_release_tag | sed 's/v//')
+            echo "VERSION=${latest_release_tag}" >> "$GITHUB_OUTPUT"
+          else
+            echo "Latest tag is unknown"
+            exit 1
+          fi
 
       - name: Checkout local
         uses: actions/checkout@v6.0.2
