@@ -77,7 +77,7 @@ jobs:
             [![FreeTube Fedora COPR build](https://github.com/DeltaCopy/freetube-fedora-copr-ci/actions/workflows/freetube-fedora-copr-ci.yml/badge.svg)](https://github.com/DeltaCopy/freetube-fedora-copr-ci/actions/workflows/freetube-fedora-copr-ci.yml)
 
             ## Latest version
-            ${{ steps.step_version.outputs.VERSION }}
+            <img src="https://img.shields.io/badge/freetube-${{ steps.step_version.outputs.VERSION }}-orange" alt="freetube-${{ steps.step_version.outputs.VERSION }}">
           EOF
           git config --global user.name $GIT_USER
           git config --global user.email ecto1@duck.com
