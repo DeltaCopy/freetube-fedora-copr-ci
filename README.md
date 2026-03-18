@@ -1,7 +1,7 @@
   # freetube-fedora-copr-ci
   RPM build spec for building FreeTube on the Fedora COPR.
 
-  A GitHub actions workflow is scheduled to run daily at 12AM to check the latest version released from https://github.com/FreeTubeApp/FreeTube
+  A GitHub actions workflow is scheduled to check the latest version released from https://github.com/FreeTubeApp/FreeTube
 
   If the latest version does not match the version available from the COPR then a new COPR build is triggered remotely.
 
@@ -31,4 +31,4 @@
   [![FreeTube Fedora COPR build](https://github.com/DeltaCopy/freetube-fedora-copr-ci/actions/workflows/freetube-fedora-copr-ci.yml/badge.svg)](https://github.com/DeltaCopy/freetube-fedora-copr-ci/actions/workflows/freetube-fedora-copr-ci.yml)
 
   ## Latest version
-  v0.23.14-beta
+  <img src="https://img.shields.io/badge/freetube-v0.23.14-beta-orange" alt="freetube-v0.23.14-beta">
