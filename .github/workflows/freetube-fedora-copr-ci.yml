@@ -40,7 +40,8 @@ jobs:
 
       - name: Update README
         run: |
-          echo ${{ steps.step_version.outputs.VERSION }}
+          version=$(echo ${{ steps.step_version.outputs.VERSION }} | sed 's/-beta/ beta/')
+          echo $version
           cat << EOF > README.md
             # freetube-fedora-copr-ci
             RPM build spec for building FreeTube on the Fedora COPR.
@@ -75,7 +76,6 @@ jobs:
             [![FreeTube Fedora COPR build](https://github.com/DeltaCopy/freetube-fedora-copr-ci/actions/workflows/freetube-fedora-copr-ci.yml/badge.svg)](https://github.com/DeltaCopy/freetube-fedora-copr-ci/actions/workflows/freetube-fedora-copr-ci.yml)
 
             ## Latest version
-            version=$(echo ${{ steps.step_version.outputs.VERSION }} | sed 's/-beta/ beta/')
             <img src="https://img.shields.io/badge/$version-orange" alt="$version">
           EOF
           git config --global user.name $GIT_USER
