@@ -31,4 +31,4 @@
   [![FreeTube Fedora COPR build](https://github.com/DeltaCopy/freetube-fedora-copr-ci/actions/workflows/freetube-fedora-copr-ci.yml/badge.svg)](https://github.com/DeltaCopy/freetube-fedora-copr-ci/actions/workflows/freetube-fedora-copr-ci.yml)
 
   ## Latest version
-  <img src="https://img.shields.io/badge/freetube-v0.23.14-beta-orange" alt="freetube-v0.23.14-beta">
+  <img src="https://img.shields.io/badge/freetube-v0.23.15-beta-orange" alt="freetube-v0.23.15-beta">
