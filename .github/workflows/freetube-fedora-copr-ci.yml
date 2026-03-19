@@ -1,6 +1,8 @@
 # Build io.freetubeapp.FreeTube and publish release
 name: FreeTube Fedora CI COPR build
-on: workflow_dispatch
+on:
+  schedule:
+    - cron: "0 00 * * *" # At 00:00 daily
 env:
   COPR_PROJECT: freetube
   COPR_USERNAME: deltacopy
@@ -9,7 +11,6 @@ env:
   SPEC_FILE: $GITHUB_WORKSPACE/freetube.spec
   GIT_USER: DeltaCopy
 jobs:
-
   GetLatestVersion:
     runs-on: ubuntu-latest
     outputs:
@@ -36,7 +37,6 @@ jobs:
         uses: actions/checkout@v6.0.2
         with:
           repository: ${{ github.repository }}
-      
 
       - name: Update README
         run: |
@@ -83,7 +83,6 @@ jobs:
           git add README.md
           git commit --allow-empty -m "[FreeTube Fedora COPR CI]: Update version"
           git push --force -v
-
 
   UpdateFedoraCOPR:
     needs: GetLatestVersion
