@@ -1,0 +1,145 @@
+# Build io.freetubeapp.FreeTube and publish release
+name: FreeTube Fedora Manual COPR build
+on: workflow_dispatch
+env:
+  COPR_PROJECT: freetube
+  COPR_USERNAME: deltacopy
+  COPR_URL: https://copr.fedorainfracloud.org
+  BUILD_REPO: https://github.com/FreeTubeApp/FreeTube
+  SPEC_FILE: $GITHUB_WORKSPACE/freetube.spec
+  GIT_USER: DeltaCopy
+jobs:
+  GetLatestVersion:
+    runs-on: ubuntu-latest
+    outputs:
+      VERSION: ${{ steps.step_version.outputs.VERSION }}
+    steps:
+      - name: Get latest version
+        id: step_version
+        run: |
+          # get latest release tag from remote
+          latest_release_tag=$(git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags $BUILD_REPO '*.*' \
+          | tail --lines=1 | cut --delimiter='/' --fields=3)
+
+          echo "INFO: Latest tag = $latest_release_tag"
+
+          if [ ! -z $latest_release_tag ]; then
+            latest_tag=$(echo $latest_release_tag | sed 's/v//')
+            echo "VERSION=${latest_release_tag}" >> "$GITHUB_OUTPUT"
+          else
+            echo "Latest tag is unknown"
+            exit 1
+          fi
+
+      - name: Checkout local
+        uses: actions/checkout@v6.0.2
+        with:
+          repository: ${{ github.repository }}
+
+      - name: Update README
+        run: |
+          version=$(echo ${{ steps.step_version.outputs.VERSION }} | sed 's/-beta/ beta/')
+          echo $version
+          cat << EOF > README.md
+            # freetube-fedora-copr-ci
+            RPM build spec for building FreeTube on the Fedora COPR.
+
+            A GitHub actions workflow is scheduled to check the latest version released from https://github.com/FreeTubeApp/FreeTube
+
+            If the latest version does not match the version available from the COPR then a new COPR build is triggered remotely.
+
+            The COPR project repository is available from: https://copr.fedorainfracloud.org/coprs/deltacopy/freetube
+
+            ## Active releases available
+
+            - Fedora 42
+            - Fedora 43
+            - Fedora rawhide
+
+            # Instructions
+
+            Enable the COPR repository then install the package.
+
+            <pre>
+            sudo dnf copr enable deltacopy/freetube
+            sudo dnf in freetube
+            </pre>
+
+            <h3> COPR build status </h3> 
+
+            [![Copr build status](https://copr.fedorainfracloud.org/coprs/deltacopy/freetube/package/freetube/status_image/last_build.png)](https://copr.fedorainfracloud.org/coprs/deltacopy/freetube/package/freetube)
+
+            <h3> GitHub action workflow status </h3> 
+
+            [![FreeTube Fedora COPR build](https://github.com/DeltaCopy/freetube-fedora-copr-ci/actions/workflows/freetube-fedora-copr-ci.yml/badge.svg)](https://github.com/DeltaCopy/freetube-fedora-copr-ci/actions/workflows/freetube-fedora-copr-ci.yml)
+
+            ## Latest version
+            <a href="https://github.com/FreeTubeApp/FreeTube/releases">
+              <img src="https://img.shields.io/badge/freetube-$version-orange" alt="freetube-$version">
+            </a>
+          EOF
+          git config --global user.name $GIT_USER
+          git config --global user.email ecto1@duck.com
+          git add README.md
+          git commit --allow-empty -m "[FreeTube Fedora COPR CI]: Update version"
+          git push --force -v
+
+  UpdateFedoraCOPR:
+    needs: GetLatestVersion
+    runs-on: ubuntu-latest
+    container: fedora:latest
+    steps:
+      - name: Checkout local
+        uses: actions/checkout@v6.0.2
+        with:
+          repository: ${{ github.repository }}
+          sparse-checkout-cone-mode: false
+
+      - name: Install dependencies
+        run: sudo dnf install -y -q copr-cli python3 git gawk
+
+      - name: Get latest tag
+        run: |
+          # use the tag name but strip the 'v' and '-beta' for the asset name to publish
+          latest_tag=$(echo ${{ needs.GetLatestVersion.outputs.VERSION }}| sed 's/^v//g;s/-beta//g')
+
+          echo "LATEST_TAG=$latest_tag" >> "$GITHUB_ENV"
+
+          sed -i "s/.*%define release_tag.*/%define release_tag ${latest_tag}/" ${{ env.SPEC_FILE }}
+
+      - name: Update copr-cli configuration
+        run: |
+          mkdir $HOME/.config
+          cat <<EOF > $HOME/.config/copr
+          [copr-cli]
+          login = ${{ secrets.COPR_BUILD_L }}
+          username = ${{ env.COPR_USERNAME }}
+          token = ${{ secrets.COPR_BUILD_T }}
+          copr_url = ${{ env.COPR_URL }}
+          EOF
+      - name: Get latest COPR build information
+        continue-on-error: true
+        run: |
+          LATEST_COPR=$(copr-cli get-package ${{ env.COPR_USERNAME }}/${{ env.COPR_PROJECT }} --name ${{ env.COPR_PROJECT }} | python -c 'import json,sys;obj=json.load(sys.stdin);print(obj["latest_build"]["source_package"]["version"]);')
+
+          echo "Latest COPR version = ${LATEST_COPR%-*}"
+          echo "Latest Git tag release = ${{ env.LATEST_TAG }}"
+
+          # convert the versions removing the decimal points to ease in comparing them
+
+          copr_version=$(echo "${LATEST_COPR%-*}" | awk -F. '{printf "%03d%03d%03d\n", $1, $2, $3}')
+          git_version=$(echo "${{ env.LATEST_TAG }}" | awk -F. '{printf "%03d%03d%03d\n", $1, $2, $3}')
+
+          if [[ $copr_version < $git_version ]] || [[ -z "$LATEST_COPR" ]]; then
+              echo "START_BUILD=true" >> "$GITHUB_ENV"
+              echo "Starting COPR build"
+          else
+              echo "START_BUILD=false" >> "$GITHUB_ENV"
+              echo "Skipping COPR build"
+          fi
+
+      - name: Start COPR build
+        if: env.START_BUILD == 'true'
+        run: |
+          echo "Starting COPR build"
+          copr-cli build ${{ env.COPR_PROJECT }} ${{ env.SPEC_FILE }}
