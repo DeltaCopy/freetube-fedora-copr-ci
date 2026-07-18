@@ -19,6 +19,7 @@ BuildRequires: yarnpkg
 BuildRequires: libxcrypt-compat
 BuildRequires: npm
 BuildRequires: git
+BuildRequires: pnpm
 
 ExclusiveArch:  x86_64
 
