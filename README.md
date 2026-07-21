@@ -26,5 +26,5 @@
 
   ## Latest version
   <a href="https://github.com/FreeTubeApp/FreeTube/releases">
-    <img src="https://img.shields.io/badge/freetube-v0.25.0 beta-orange" alt="freetube-v0.25.0 beta">
+    <img src="https://img.shields.io/badge/freetube-v0.25.1 beta-orange" alt="freetube-v0.25.1 beta">
   </a>
