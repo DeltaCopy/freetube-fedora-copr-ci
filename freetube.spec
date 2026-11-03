@@ -32,6 +32,7 @@ Open source desktop YouTube player built with privacy in mind.
 %autosetup -n %{_builddir}/%{app}-%{version}-beta -p1
 
 sed -i "s/targets = Platform.LINUX.*/targets = Platform.LINUX.createTarget(['dir'], arch)/" "%{_builddir}/%{app}-%{version}-beta/_scripts/build.mjs"
+echo "strictDepBuilds: false" > "%{_builddir}/%{app}-%{version}-beta/pnpm-workspace.yaml"
 
 # create a .desktop file
 cat << EOF > %{app_id}.desktop
@@ -48,8 +49,8 @@ Categories=Network;
 EOF
 
 %build
-yarn install
-yarn run build
+pnpm install
+pnpm run build
 
 %install
 mkdir -p %{buildroot}%{_bindir}
